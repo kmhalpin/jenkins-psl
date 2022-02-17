@@ -8,26 +8,25 @@ def main(script) {
     // Object initialization
     c = new Config()
     sprebuild = new prebuild()
+    sbuild = new build()
 
     // Pipeline object
     def repository_name = ("${script.env.repository_name}" != "null")
-        ? "${script.env.repository_name}"
-        : ""
+        ? "${script.env.repository_name}" : ""
     def branch_name = ("${script.env.branch_name}" != "null")
-        ? "${script.env.branch_name}"
-        : ""
+        ? "${script.env.branch_name}" : ""
     def git_user = ("${script.env.git_user}" != "null")
-        ? "${script.env.git_user}"
-        : ""
+        ? "${script.env.git_user}" : ""
     def docker_user = ("${script.env.docker_user}" != "null")
-        ? "${script.env.docker_user}"
-        : ""
+        ? "${script.env.docker_user}" : ""
     def app_port = ("${script.env.app_port}" != "null")
-        ? "${script.env.app_port}"
-        : ""
+        ? "${script.env.app_port}" : ""
     def pr_num = ("${script.env.pr_num}" != "null")
-        ? "${script.env.pr_num}"
-        : ""
+        ? "${script.env.pr_num}" : ""
+
+    // Default value
+    def docker_registry = ("${script.env.docker_registry}" != "null")
+        ? "${script.env.docker_registry}" : "${c.default_docker_registry}"
 
     // Initialize docker tools
     def dockerTool = tool name: 'docker', type: 'dockerTool'
@@ -40,7 +39,8 @@ def main(script) {
         docker_user,
         app_port,
         pr_num,
-        dockerTool
+        dockerTool,
+        docker_registry
     )
 
     ansiColor('xterm') {
@@ -53,9 +53,9 @@ def main(script) {
             sprebuild.checkoutBuildTest(p)
         }
     
-        //stage('Build & Push Image') {
-            // TODO: Call build & push image function
-        //}
+        stage('Build & Push Image') {
+            sbuild.build(p)
+        }
     
         //stage('Merge') {
             // TODO: Call merge function
