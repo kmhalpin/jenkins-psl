@@ -7,6 +7,7 @@ import com.workshop.stages.*
 def main(script) {
     // Object initialization
     c = new Config()
+    sprebuild = new prebuild()
 
     // Pipeline object
     def repository_name = ("${script.env.repository_name}" != "null")
@@ -28,23 +29,29 @@ def main(script) {
         ? "${script.env.pr_num}"
         : ""
 
+    // Initialize docker tools
+    def dockerTool = tool name: 'docker', type: 'dockerTool'
+
+    // Pipeline init
     p = new Pipeline(
         repository_name,
         branch_name,
         git_user,
         docker_user,
         app_port,
-        pr_num
+        pr_num,
+        dockerTool
     )
 
     ansiColor('xterm') {
-        //stage('Pre Build - Details') {
-           // TODO: Call pre build details function
-        //}
-    
-        //stage('Pre Build - Checkout & Test') {
-            // TODO: Call pre build checkout & test function
-        //}
+        stage('Pre Build - Details') {
+            sprebuild.validation(p)
+            sprebuild.details(p)
+        }
+
+        stage('Pre Build - Checkout & Test') {
+            sprebuild.checkoutBuildTest(p)
+        }
     
         //stage('Build & Push Image') {
             // TODO: Call build & push image function
