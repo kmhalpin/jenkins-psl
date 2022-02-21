@@ -9,6 +9,7 @@ def main(script) {
     c = new Config()
     sprebuild = new prebuild()
     sbuild = new build()
+    spostbuild = new postbuild()
 
     // Pipeline object
     def repository_name = ("${script.env.repository_name}" != "null")
@@ -57,9 +58,9 @@ def main(script) {
             sbuild.build(p)
         }
     
-        //stage('Merge') {
-            // TODO: Call merge function
-        //}
+        stage('Merge') {
+            spostbuild.merge(p)
+        }
     
         //stage('Deploy') {
             // TODO: Call deploy function
