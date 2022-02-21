@@ -11,6 +11,7 @@ def main(script) {
     sbuild = new build()
     spostbuild = new postbuild()
     sdeploy = new deploy()
+    spostdeploy = new postdeploy()
 
     // Pipeline object
     def repository_name = ("${script.env.repository_name}" != "null")
@@ -25,6 +26,9 @@ def main(script) {
         ? "${script.env.app_port}" : ""
     def pr_num = ("${script.env.pr_num}" != "null")
         ? "${script.env.pr_num}" : ""
+
+    // Timeout for Healthcheck
+    def timeout_hc = (script.env.timeout_hc != "null") ? script.env.timeout_hc : 10
 
     // Default value
     def docker_registry = ("${script.env.docker_registry}" != "null")
@@ -42,7 +46,8 @@ def main(script) {
         app_port,
         pr_num,
         dockerTool,
-        docker_registry
+        docker_registry,
+        timeout_hc
     )
 
     ansiColor('xterm') {
@@ -67,11 +72,8 @@ def main(script) {
             sdeploy.deploy(p)
         }
     
-        //stage('Service Healthcheck') {
-            // TODO: Call healthcheck function
-        //}
-        stage('Test stage') {
-            println "Hello!"
+        stage('Service Healthcheck') {
+            spostdeploy.healthcheck(p)
         }
     }
 }
