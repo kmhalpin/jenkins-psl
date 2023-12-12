@@ -4,7 +4,7 @@ package com.workshop.stages
 import com.workshop.Pipeline
 
 def healthcheck(Pipeline p) {
-    def hostIp = '172.31.16.1' // sh script: "ip route show | awk '/default/ {print \$3}' | tr -d '\n'",
+    def hostIp = 'host.docker.internal' // sh script: "ip route show | awk '/default/ {print \$3}' | tr -d '\n'",
         // returnStdout: true
 
     timeout(time: p.timeout_hc, unit: 'SECONDS'){
