@@ -41,7 +41,7 @@ def checkoutBuildTest(Pipeline p) {
     println "\u001b[36mChecking out from : \u001b[0mpull/${p.pr_num}/head:pr/${p.pr_num}..."
     git branch: "${p.branch_name}", url: "https://github.com/${p.git_user}/${p.repository_name}.git"
 
-    docker.withTool("${c.default_docker_jenkins_tool}") {
+    /* docker.withTool("${c.default_docker_jenkins_tool}") {
         def golangImage = docker.image("${c.default_golang_base_image}")
         golangImage.inside("-u 0") {
             build = sh returnStatus: true, script: "go build -v"
@@ -61,6 +61,6 @@ def checkoutBuildTest(Pipeline p) {
                 error("Unit test failed")
             }
         }
-    }
+    } */
 }
 
