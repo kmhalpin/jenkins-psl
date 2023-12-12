@@ -8,6 +8,6 @@ def build(Pipeline p) {
     c = new Config()
 
     docker.withTool("${c.default_docker_jenkins_tool}") {
-        def image = docker.build("${p.docker_user}/${p.repository_name}:build-$BUILD_NUMBER")
+        def image = docker.build("${p.repository_name}:build-$BUILD_NUMBER")
     }
 }
