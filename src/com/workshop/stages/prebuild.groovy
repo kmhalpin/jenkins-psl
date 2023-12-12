@@ -37,17 +37,9 @@ def validation(Pipeline p) {
 def checkoutBuildTest(Pipeline p) {
     c = new Config()
 
-    withCredentials([usernamePassword(credentialsId: 'github-personal', passwordVariable: 'git_token', usernameVariable: 'git_username')]) {
-        println "============\u001b[44mCommencing PR Checkout\u001b[0m============"
-        println "\u001b[36mChecking out from : \u001b[0mpull/${p.pr_num}/head:pr/${p.pr_num}..."
-        git branch: "${p.branch_name}", url: "https://github.com/${p.git_user}/${p.repository_name}.git"
-
-        sh "git config --global user.name '${git_username}'"
-        sh "git config --global user.email '${git_username}@tokopedia.com'"
-        sh "git branch -D pr/${p.pr_num} &> /dev/null || true"
-        sh "git fetch origin pull/${p.pr_num}/head:pr/${p.pr_num}"
-        sh "git merge --no-ff pr/${p.pr_num}"
-    }
+    println "============\u001b[44mCommencing PR Checkout\u001b[0m============"
+    println "\u001b[36mChecking out from : \u001b[0mpull/${p.pr_num}/head:pr/${p.pr_num}..."
+    git branch: "${p.branch_name}", url: "https://github.com/${p.git_user}/${p.repository_name}.git"
 
     docker.withTool("${c.default_docker_jenkins_tool}") {
         def golangImage = docker.image("${c.default_golang_base_image}")
