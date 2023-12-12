@@ -9,7 +9,7 @@ def main(script) {
     c = new Config()
     sprebuild = new prebuild()
     sbuild = new build()
-    spostbuild = new postbuild()
+    // spostbuild = new postbuild()
     sdeploy = new deploy()
     spostdeploy = new postdeploy()
 
@@ -64,9 +64,9 @@ def main(script) {
             sbuild.build(p)
         }
     
-        stage('Merge') {
-            spostbuild.merge(p)
-        }
+        // stage('Merge') {
+            // spostbuild.merge(p)
+        // }
     
         stage('Deploy') {
             sdeploy.deploy(p)
